@@ -32,15 +32,20 @@ void setup(){
   display.display();
   delay(500);
 
-  povoateMatrix(MATRIX);
-  //makePattern(MATRIX);
+  Serial.printf("\nlol\n");
+
+  liveFill(MATRIX);
+  printMatrix(MATRIX);
   display.clearDisplay();
   matrixDisplay(MATRIX, display);//Works here not in loop
   display.display();
+  checkRules(MATRIX);
+  printMatrix(MATRIX);
 }
 
 
 void loop(){
+  /*
   checkRules(MATRIX);
   printArray(MATRIX);
   display.clearDisplay();
@@ -50,4 +55,5 @@ void loop(){
     }
   }
   display.display();
+  */
 }
