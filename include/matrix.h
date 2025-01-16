@@ -16,7 +16,7 @@ void checkRules (bool ARR[MATRIX_J][MATRIX_K]){
     for (int Y = 1; Y < MATRIX_K-1; Y ++){
         for (int X = 1; X < MATRIX_J-1; X++){
             int NEIGHBORS = checkAdjacent(ARR, X, Y);
-            Serial.printf("   COORDS: %d, %d ;NEIB: %d\n", Y, X, NEIGHBORS);
+            Serial.printf("COORDS: %d, %d  NEIB: %d\n", Y, X, NEIGHBORS);
             switch (NEIGHBORS){
             // Underpopulation
             case 0:
@@ -45,22 +45,24 @@ void checkRules (bool ARR[MATRIX_J][MATRIX_K]){
 
 // Try https://pastebin.com/A8h8D6eE
 int checkAdjacent (bool ARR[MATRIX_J][MATRIX_K],int INDEX_X, int INDEX_Y){
-    int ADJACENT_NUM = 0;
-    // Long ass line
-    int ADJACENT_LIST[9] = {ARR[INDEX_Y-1][INDEX_X-1], ARR[INDEX_Y-1][INDEX_X], ARR[INDEX_Y-1][INDEX_X+1], 
-                            ARR[INDEX_Y][INDEX_X-1],            0             , ARR[INDEX_Y][INDEX_X+1],
-                            ARR[INDEX_Y+1][INDEX_X-1], ARR[INDEX_Y+1][INDEX_X], ARR[INDEX_Y+1][INDEX_X+1]}; 
-    
-    for (int NUM = 0; NUM < 9; NUM++){          
-        if (ADJACENT_LIST[NUM]){
-            ADJACENT_NUM++;
+    int trueCount = 0;
+
+    // Iterate through the 3x3 grid centered on (INDEX_X, INDEX_Y)
+    for (int offsetY = -1; offsetY <= 1; offsetY++) {
+        for (int offsetX = -1; offsetX <= 1; offsetX++) {
+            // Skip the center cell itself
+            if (offsetX == 0 && offsetY == 0) {
+                continue;
+            }
+
+            // Count the neighbor
+            trueCount += ARR[INDEX_Y + offsetY][INDEX_X + offsetX];
         }
     }
-    printArray(ADJACENT_LIST,9);
-    return ADJACENT_NUM;
+    return trueCount;
 }
 
-// Working function
+//Povoate the matrix with random booleans 
 void povoateMatrix (bool MATRIX[MATRIX_J][MATRIX_K]){
     for (int Y = 1; Y < MATRIX_K-1; Y ++){
         for (int X = 1; X < MATRIX_J-1; X++){
@@ -69,34 +71,27 @@ void povoateMatrix (bool MATRIX[MATRIX_J][MATRIX_K]){
     }
 }
 
-void makePattern( bool ARR[MATRIX_J][MATRIX_K]){
-    int INDEX_X = MATRIX_J /2;
-    int INDEX_Y = MATRIX_K /2; 
-    ARR[INDEX_Y][INDEX_X-1] = true;
-    ARR[INDEX_Y][INDEX_X] = true;
-    ARR[INDEX_Y][INDEX_X+1] = true;
-}
-
+//Fills the matrix with live cells 
 void liveFill(bool ARR[MATRIX_J][MATRIX_K]){
     for (int Y = 0; Y < MATRIX_K; Y ++){
         for (int X = 0; X < MATRIX_J; X++){
+            //Checks if coordinate is outside of usable array
             if ((X == 0 || X == MATRIX_J-1) || (Y == 0 || Y == MATRIX_K-1)){
-                MATRIX[Y][X] = false;
+                MATRIX[Y][X] = 0;
             }
-            //else if (Y % 2 == 0 && X % 2 == 0){
             else{
-                MATRIX[Y][X] = true;
+                MATRIX[Y][X] = 1;
             }
-            //}
         }
     }
 }
+
 
 // Fuction not working, loop works outside function
 void matrixDisplay( bool MATRIX[MATRIX_J][MATRIX_K],Adafruit_SSD1306 i2cDisplay){
     for (int Y = 1; Y < MATRIX_K-1; Y ++){
         for (int X = 1; X < MATRIX_J-1; X++){
-      i2cDisplay.drawPixel(X,Y,MATRIX[Y][X]);
+      i2cDisplay.drawPixel(X,Y,MATRIX[Y][X]); 
     }
   }
 }

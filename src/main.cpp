@@ -2,7 +2,6 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <stdlib.h>
 #include <stdbool.h>
 #include <matrix.h>
 
@@ -12,10 +11,6 @@
 #define SCREEN_ADDRESS 0x3C
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-//bool (*MATRIXPRT)[MATRIX_K] = MATRIX;
-//https://stackoverflow.com/questions/1052818/create-a-pointer-to-two-dimensional-array
-//bool (*MATRIXPRT)[MATRIX_K];
-//MATRIXPRT= (bool(*)[MATRIX_K]) malloc((MATRIX_J*MATRIX_K) * sizeof(bool));
 
 void setup(){
   pinMode(20, OUTPUT);
@@ -32,9 +27,10 @@ void setup(){
   display.display();
   delay(500);
 
-  Serial.printf("\nlol\n");
+  Serial.printf("\nlol\n\n");
 
   liveFill(MATRIX);
+  //povoateMatrix(MATRIX);
   printMatrix(MATRIX);
   display.clearDisplay();
   matrixDisplay(MATRIX, display);//Works here not in loop
