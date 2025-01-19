@@ -1,55 +1,48 @@
-#include <Arduino.h> 
-#include <Wire.h>
-#include <Adafruit_GFX.h>
+#include <Arduino.h>
+#include <SPI.h>
 #include <Adafruit_SSD1306.h>
-#include <stdbool.h>
-#include <matrix.h>
+#include <Wire.h>
+#include <screen.h> 
+#include <matrix.h> 
+#include <define.h>
 
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 32
-#define OLED_RESET -1
-#define SCREEN_ADDRESS 0x3C
 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+//Creates display instance 
+Adafruit_SSD1306 display(DISPLAY_WIDTH, DISPLAY_HEIGHT, &Wire, -1);
 
-void setup(){
-  pinMode(20, OUTPUT);
-  digitalWrite(20, LOW);
+int displaySetup(){
   Wire.begin(11,10);
-  Serial.begin(9600);
-
-  display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
+  display.begin(SSD1306_SWITCHCAPVCC, DISPLAY_ADRESS);
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0, 0);
-  display.printf("Conway's Game of Life");
+  display.printf("Hello World!"); 
   display.display();
-  delay(500);
+  return 1; 
+}
 
-  Serial.printf("\nlol\n\n");
-
-  liveFill(MATRIX);
-  //povoateMatrix(MATRIX);
+void setup(){
+  pinMode(20, OUTPUT);
+  digitalWrite(20, LOW);
+  Serial.begin(9600);
+  displaySetup();
+  povoateMatrix();
   printMatrix(MATRIX);
-  display.clearDisplay();
-  matrixDisplay(MATRIX, display);//Works here not in loop
-  display.display();
-  checkRules(MATRIX);
+  displayMatrix(MATRIX,display);
+  for (int i = 1; i < MATRIX_i-1; i++){
+    for (int j = 1; j < MATRIX_j-1; j++){
+      //MATRIX[i][j] = gameRules(countAlive(i,j), MATRIX[i][j]);
+      bool cell = MATRIX[i][j];
+      int neighbors = countAlive(i,j);
+      MATRIX[i][j] = gameRules(neighbors, cell); 
+    }
+  }
   printMatrix(MATRIX);
+  //displayMatrix(MATRIX, display);
 }
 
 
 void loop(){
-  /*
-  checkRules(MATRIX);
-  printArray(MATRIX);
-  display.clearDisplay();
-  for (int X = 0; X < MATRIX_J; X ++){
-    for (int Y = 0; Y < MATRIX_K; Y++){
-      display.drawPixel(X,Y,MATRIX[X][Y]);
-    }
-  }
-  display.display();
-  */
+  //displayMatrix(MATRIX, display);
 }

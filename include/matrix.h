@@ -1,116 +1,56 @@
-#include <stdbool.h>
-#include <Arduino.h>
+#include <stdbool.h> 
+#include <define.h>
 
-// +2 to dodge boundaries limits 
-#define MATRIX_J (3 +2)
-#define MATRIX_K (3 +2)
+bool MATRIX[MATRIX_i][MATRIX_j];
 
-bool MATRIX[MATRIX_K][MATRIX_J];
 
-// Func prototypes
-int checkAdjacent (bool ARR[MATRIX_J][MATRIX_K],int INDEX_X, int INDEX_Y);
-void povoateMatrix (bool MATRIX[MATRIX_J][MATRIX_K]);
-void printArray( int* ARRAY, int ARRAY_LEN);
-
-void checkRules (bool ARR[MATRIX_J][MATRIX_K]){
-    for (int Y = 1; Y < MATRIX_K-1; Y ++){
-        for (int X = 1; X < MATRIX_J-1; X++){
-            int NEIGHBORS = checkAdjacent(ARR, X, Y);
-            Serial.printf("COORDS: %d, %d  NEIB: %d\n", Y, X, NEIGHBORS);
-            switch (NEIGHBORS){
-            // Underpopulation
-            case 0:
-                ARR[Y][X] = false;
-                break;
-            case 1:
-                ARR[Y][X] = false;
-                break;
-            // Good amount 
-            case 2:
-                ARR[Y][X] = true;
-                break;
-            case 3:
-                ARR[Y][X] = true;
-                break;
-            // Overpopulation   
-            default:
-                ARR[Y][X] = false;
-                break;
-            }
-        }
-        Serial.printf("\n");
-    }
-    Serial.printf("---------------------\n");
-}
-
-// Try https://pastebin.com/A8h8D6eE
-int checkAdjacent (bool ARR[MATRIX_J][MATRIX_K],int INDEX_X, int INDEX_Y){
-    int trueCount = 0;
-
-    // Iterate through the 3x3 grid centered on (INDEX_X, INDEX_Y)
-    for (int offsetY = -1; offsetY <= 1; offsetY++) {
-        for (int offsetX = -1; offsetX <= 1; offsetX++) {
-            // Skip the center cell itself
-            if (offsetX == 0 && offsetY == 0) {
-                continue;
-            }
-
-            // Count the neighbor
-            trueCount += ARR[INDEX_Y + offsetY][INDEX_X + offsetX];
-        }
-    }
-    return trueCount;
-}
-
-//Povoate the matrix with random booleans 
-void povoateMatrix (bool MATRIX[MATRIX_J][MATRIX_K]){
-    for (int Y = 1; Y < MATRIX_K-1; Y ++){
-        for (int X = 1; X < MATRIX_J-1; X++){
-           MATRIX[Y][X] = rand() & 1;// random bool
-        }   
-    }
-}
-
-//Fills the matrix with live cells 
-void liveFill(bool ARR[MATRIX_J][MATRIX_K]){
-    for (int Y = 0; Y < MATRIX_K; Y ++){
-        for (int X = 0; X < MATRIX_J; X++){
-            //Checks if coordinate is outside of usable array
-            if ((X == 0 || X == MATRIX_J-1) || (Y == 0 || Y == MATRIX_K-1)){
-                MATRIX[Y][X] = 0;
-            }
-            else{
-                MATRIX[Y][X] = 1;
-            }
+void povoateMatrix(){
+    for (int i = 1; i < MATRIX_i-1; i++){
+        for (int j = 1; j < MATRIX_j-1; j++){
+            MATRIX[i][j] = Alive;
         }
     }
 }
 
-
-// Fuction not working, loop works outside function
-void matrixDisplay( bool MATRIX[MATRIX_J][MATRIX_K],Adafruit_SSD1306 i2cDisplay){
-    for (int Y = 1; Y < MATRIX_K-1; Y ++){
-        for (int X = 1; X < MATRIX_J-1; X++){
-      i2cDisplay.drawPixel(X,Y,MATRIX[Y][X]); 
-    }
-  }
-}
-
-// Debugging 
-void printArray( int* ARRAY, int ARRAY_LEN){
-    for (int X = 0; X < ARRAY_LEN; X ++){
-        Serial.printf("%d", ARRAY[X]);
-    //Serial.printf("\n-----------------------\n");
-    }
-}
-
-// Debugging 
-void printMatrix (bool MATRIX[MATRIX_J][MATRIX_K]){
-    for (int Y = 1; Y < MATRIX_K-1; Y ++){
-        for (int X = 1; X < MATRIX_J-1; X++){
-            Serial.printf("%d", MATRIX[Y][X]);
-            }
-        Serial.printf("\n");
+int countAlive( int I, int J ){
+    int aliveCount = 0;
+    int dx[8] = {1, 1, 0, -1, -1, -1, 0, 1};
+    int dy[8] = {0, -1, -1, -1, 0, 1, 1, 1};
+    
+    for (int k = 0; k < 8; k++) {
+        int new_x = J + dx[k];
+        int new_y = I + dy[k];
+        if (MATRIX[new_y][new_x]){
+            aliveCount ++;
         }
-    Serial.printf("-----------------------\n");  
+    }
+    Serial.printf("\n%d,%d, Ngbh: %d", I, J, aliveCount);
+    return aliveCount;
 }
+
+int gameRules(int neighbors, bool state){
+    //int neighbors = countAlive(matrix, )
+    switch (state)
+    {
+    case 0 :
+        if (neighbors == 3){
+            return 1;
+        }
+        break;
+    
+    case 1:
+        if (neighbors < 2){
+            return 0;
+        }
+        else if (neighbors == 2 || neighbors == 3){
+            return 1;
+        }
+        else if (neighbors > 3 ){
+            return 0;
+        } 
+        break;
+    }
+    return 0;
+}
+
+
