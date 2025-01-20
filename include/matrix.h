@@ -1,18 +1,29 @@
 #include <stdbool.h> 
 #include <define.h>
 
-bool MATRIX[MATRIX_i][MATRIX_j];
-
-
-void povoateMatrix(){
-    for (int i = 1; i < MATRIX_i-1; i++){
-        for (int j = 1; j < MATRIX_j-1; j++){
-            MATRIX[i][j] = Alive;
+void initializeMatrix(int MATRIX[ MATRIX_i][MATRIX_j]) {
+    for (int i = 0; i < MATRIX_i; i++) {
+        for (int j = 0; j < MATRIX_j; j++) {
+            MATRIX[i][j] = false; // Or Dead
         }
     }
 }
 
-int countAlive( int I, int J ){
+void liveMatrix(int MATRIX[ MATRIX_i][MATRIX_j]){
+    for (int i = 0; i < MATRIX_i; i++){
+        for (int j = 0; j < MATRIX_j; j++){
+            if ((i >= 1 && j >= 1) && (i < MATRIX_i-1 && j < MATRIX_j-1)){
+                MATRIX[i][j] = 1;
+            }
+            else{
+                MATRIX[i][j] = 0;
+            }
+        }
+    }
+}
+
+int countAlive(int I, int J, int MATRIX[ MATRIX_i][MATRIX_j]){
+    Serial.printf("\n\n");
     int aliveCount = 0;
     int dx[8] = {1, 1, 0, -1, -1, -1, 0, 1};
     int dy[8] = {0, -1, -1, -1, 0, 1, 1, 1};
@@ -20,37 +31,37 @@ int countAlive( int I, int J ){
     for (int k = 0; k < 8; k++) {
         int new_x = J + dx[k];
         int new_y = I + dy[k];
-        if (MATRIX[new_y][new_x]){
-            aliveCount ++;
+        
+        // Boundary check
+        if (new_x >= 0 && new_x < MATRIX_j && new_y >= 0 && new_y < MATRIX_i) {
+            Serial.printf("Checking neighbor (%d, %d): %d\n", new_y, new_x, MATRIX[new_y][new_x]);
+            if (MATRIX[new_y][new_x] == 1) {
+                aliveCount++;
+            }
         }
     }
-    Serial.printf("\n%d,%d, Ngbh: %d", I, J, aliveCount);
+
+    Serial.printf("%d,%d, Ngbh: %d", I, J, aliveCount);
     return aliveCount;
 }
 
 int gameRules(int neighbors, bool state){
     //int neighbors = countAlive(matrix, )
-    switch (state)
-    {
-    case 0 :
+    if (state){
+        if (neighbors == 2 || neighbors == 3){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+    else {
         if (neighbors == 3){
             return 1;
         }
-        break;
-    
-    case 1:
-        if (neighbors < 2){
+        else{
             return 0;
         }
-        else if (neighbors == 2 || neighbors == 3){
-            return 1;
-        }
-        else if (neighbors > 3 ){
-            return 0;
-        } 
-        break;
     }
     return 0;
 }
-
-

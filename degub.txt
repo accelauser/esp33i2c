@@ -1,0 +1,108 @@
+00000
+00000
+00000
+00000
+00000
+
+00000
+01110
+01110
+01110
+00000
+
+Checking neighbor (1, 2): 1
+Checking neighbor (0, 2): 0
+Checking neighbor (0, 1): 0
+Checking neighbor (0, 0): 0
+Checking neighbor (1, 0): 0
+Checking neighbor (2, 0): 0
+Checking neighbor (2, 1): 1
+Checking neighbor (2, 2): 1
+1,1, Ngbh: 3
+
+Checking neighbor (1, 3): 1
+Checking neighbor (0, 3): 0
+Checking neighbor (0, 2): 0
+Checking neighbor (0, 1): 0
+Checking neighbor (1, 1): 1
+Checking neighbor (2, 1): 1
+Checking neighbor (2, 2): 1
+Checking neighbor (2, 3): 1
+1,2, Ngbh: 5
+
+Checking neighbor (1, 4): 0
+Checking neighbor (0, 4): 0
+Checking neighbor (0, 3): 0
+Checking neighbor (0, 2): 0
+Checking neighbor (1, 2): 0 // ERRADO 
+Checking neighbor (2, 2): 1
+Checking neighbor (2, 3): 1
+Checking neighbor (2, 4): 0
+1,3, Ngbh: 2
+
+Checking neighbor (2, 2): 1
+Checking neighbor (1, 2): 0 // ERRADO
+Checking neighbor (1, 1): 1
+Checking neighbor (1, 0): 0
+Checking neighbor (2, 0): 0
+Checking neighbor (3, 0): 0
+Checking neighbor (3, 1): 1  
+Checking neighbor (3, 2): 1 
+2,1, Ngbh: 4
+
+Checking neighbor (2, 3): 1
+Checking neighbor (1, 3): 1
+Checking neighbor (1, 2): 0 // ERRADO
+Checking neighbor (1, 1): 1
+Checking neighbor (2, 1): 0 // ERRADO
+Checking neighbor (3, 1): 1
+Checking neighbor (3, 2): 1
+Checking neighbor (3, 3): 1
+2,2, Ngbh: 6
+
+Checking neighbor (2, 4): 0
+Checking neighbor (1, 4): 0
+Checking neighbor (1, 3): 1
+Checking neighbor (1, 2): 0 // ERRADO
+Checking neighbor (2, 2): 0 // ERRADO
+Checking neighbor (3, 2): 1
+Checking neighbor (3, 3): 1
+Checking neighbor (3, 4): 0
+2,3, Ngbh: 3
+
+Checking neighbor (3, 2): 1
+Checking neighbor (2, 2): 0 // ERRADO
+Checking neighbor (2, 1): 0 // ERRADO 
+Checking neighbor (2, 0): 0 
+Checking neighbor (3, 0): 0 
+Checking neighbor (4, 0): 0
+Checking neighbor (4, 1): 0
+Checking neighbor (4, 2): 0
+3,1, Ngbh: 1
+
+Checking neighbor (3, 3): 1
+Checking neighbor (2, 3): 1
+Checking neighbor (2, 2): 0 // ERRADO
+Checking neighbor (2, 1): 0 // ERRADO
+Checking neighbor (3, 1): 0 // ERRADO
+Checking neighbor (4, 1): 0 
+Checking neighbor (4, 2): 0
+Checking neighbor (4, 3): 0
+3,2, Ngbh: 2
+
+Checking neighbor (3, 4): 0
+Checking neighbor (2, 4): 0
+Checking neighbor (2, 3): 1
+Checking neighbor (2, 2): 0 // ERRADO
+Checking neighbor (3, 2): 1
+Checking neighbor (4, 2): 0
+Checking neighbor (4, 3): 0
+Checking neighbor (4, 4): 0
+3,3, Ngbh: 2
+
+00000
+01010
+00010
+00110
+00000
+
